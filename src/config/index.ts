@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import { Config } from './types';
-import { ENVIRONMENTS } from '../constants';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,19 +14,18 @@ const generateConfig = (): Config => {
     return (process.env[key] || defaultValue) as string;
   };
 
-  const environment = process.env.NODE_ENV || ENVIRONMENTS.LOCAL;
-  console.log(environment);
+  const environment = 'local';
 
   const config: Config = {
     environment,
     database: {
       connection: {
-        //pasar cosas de la db al .env y cambiar config
-        port: Number(getEnvVar('DB_PORT', '27017')),
+        port: Number(getEnvVar('DB_PORT', '3306')),
         host: getEnvVar('DB_HOSTNAME'),
         user: getEnvVar('DB_USERNAME'),
         password: getEnvVar('DB_PASS'),
-        database: getEnvVar('DB_NAME')
+        database: getEnvVar('DB_NAME'),
+        driver: getEnvVar('DB_DRIVER')
       },
       connectionTimeout: Number(getEnvVar('DB_CONNECTION_TIMEOUT', '10000'))
     },
@@ -37,6 +35,7 @@ const generateConfig = (): Config => {
       bodySizeLimit: Number(getEnvVar('API_BODY_SIZE_LIMIT', '10mb')),
       parameterLimit: Number(getEnvVar('API_PARAMETER_LIMIT', '10000')),
       port: Number(getEnvVar('API_LOCAL_PORT', '3001')),
+      fixerApiKey: getEnvVar('FIXER_API_KEY'),
     }
   };
 

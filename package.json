@@ -40,6 +40,7 @@
   },
   "homepage": "https://github.com/salvador-lucas/transferApi#readme",
   "dependencies": {
+    "@types/node": "^18.14.6",
     "ajv": "^8.11.0",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^2.1.1",
@@ -50,7 +51,10 @@
     "express": "^4.18.1",
     "helmet": "^5.1.1",
     "luxon": "^3.0.1",
-    "object-inspect": "^1.12.2"
+    "mysql": "^2.18.1",
+    "mysql2": "^3.2.0",
+    "object-inspect": "^1.12.2",
+    "sequelize": "^6.29.0"
   },
   "devDependencies": {
     "@types/ajv": "^1.0.0",

@@ -5,6 +5,7 @@ interface DBConnection {
   user: string;
   password: string;
   database: string;
+  driver: string;
 }
 
 interface DBConfig {
@@ -18,6 +19,7 @@ interface APIConfig {
   bodySizeLimit: number;
   parameterLimit: number;
   port: number;
+  fixerApiKey: string;
 }
 
 export interface Config {
