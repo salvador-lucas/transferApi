@@ -22,7 +22,6 @@ services:
     restart: unless-stopped
     env_file: ./.env
     ports:
-      # - $API_LOCAL_PORT:$NODE_DOCKER_PORT
       - $API_LOCAL_PORT:$API_LOCAL_PORT
     environment:
       - DB_HOST=mysqldb
@@ -30,8 +29,5 @@ services:
       - DB_PASSWORD=$DB_PASS
       - DB_NAME=$DB_NAME
       - DB_PORT=$DB_PORT
-    stdin_open: true
-    tty: true
-
 volumes: 
   db:

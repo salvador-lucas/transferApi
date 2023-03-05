@@ -1,4 +1,6 @@
+/* eslint-disable no-magic-numbers */
 import { DataTypes, Model, Optional } from 'sequelize';
+import bcrypt from 'bcrypt';
 import sequelizeConnection from '../config';
 
 interface UserAttributes {
@@ -20,6 +22,10 @@ class User extends Model<UserAttributes, UserInput> implements UserAttributes {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
   public readonly deletedAt!: Date;
+
+  validPassword = (password: string): boolean => {
+    return bcrypt.compareSync(password, this.password);
+  };
 }
 
 User.init({
@@ -47,7 +53,21 @@ User.init({
 }, {
   timestamps: true,
   sequelize: sequelizeConnection,
-  paranoid: true
+  paranoid: true,
+  hooks: {
+    beforeCreate: async (user) => {
+      if (user.password) {
+        const salt = await bcrypt.genSaltSync(10, 'a');
+        user.password = bcrypt.hashSync(user.password, salt);
+      }
+    },
+    beforeUpdate:async (user) => {
+      if (user.password) {
+        const salt = await bcrypt.genSaltSync(10, 'a');
+        user.password = bcrypt.hashSync(user.password, salt);
+      }
+    }
+  }
 });
 
 export type UserInput = Optional<UserAttributes, 'id'>;

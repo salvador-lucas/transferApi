@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import generateHealthRoute from '~routes/health';
+import generateAuthRoutes from './auth';
 // import generateAuthRoutes from '~routes/auth';
 
 const router = Router();
@@ -9,7 +10,7 @@ const generateRoutes = (): Router => {
   generateHealthRoute(router);
 
   //auth routes
-  // generateAuthRoutes(router);
+  generateAuthRoutes(router);
 
   return router;
 };

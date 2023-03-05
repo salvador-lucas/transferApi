@@ -1,6 +1,9 @@
 export interface ErrnoException extends Error {
-  code?: number;
-  path?: string;
-  syscall?: string;
+  parent: {
+    code?: string;
+    errno?: number;
+  };
+  sqlState?: string;
+  sqlMessage?: string;
   stack?: string;
 }
