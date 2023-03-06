@@ -1,4 +1,5 @@
-import { Op } from 'sequelize';
+import moment from 'moment';
+import { Op, WhereOptions } from 'sequelize';
 import Account from '~db/models/Accounts';
 import Transfer from '~db/models/Transfers';
 
@@ -14,4 +15,29 @@ export const storeTransfer = async (transfer: Transfer): Promise<void> => {
   await Transfer.create(transfer);
   console.info('finished saving transfer in database');
   return;
+};
+
+export const getUserTransfers = async (accountIds: number[], dateFrom?: string, dateTo?: string, externalAccounts?: boolean): Promise<Transfer[]> => {
+  const operator = externalAccounts ? Op.notIn : Op.in;
+
+  const where: WhereOptions = {
+    accountFrom: {
+      [Op.in]: accountIds
+    }, accountTo:{
+      [operator]: accountIds
+    }
+  };
+
+  if(dateFrom && moment(dateFrom).isValid()){
+    where.date = { [Op.gte]: dateFrom };
+  }
+
+  if(dateTo && moment(dateTo).isValid()){
+    where.date = { [Op.lte]: dateTo };
+  }
+
+  const trans = await Transfer.findAll({
+    where
+  });
+  return trans;
 };

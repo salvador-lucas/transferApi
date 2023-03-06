@@ -1,12 +1,14 @@
+import moment from 'moment';
 import { getExchangeRates } from '~api/repositories/currencies';
-import { checkAccounts, storeTransfer } from '~api/repositories/transfers';
+import { checkAccounts, getUserTransfers, storeTransfer } from '~api/repositories/transfers';
 import { databaseErrorHandler } from '~db/error_handler';
 import Transfer from '~db/models/Transfers';
 import { getExchangeRatesFromProvider } from './currencies';
 import { accountInfoNotFoundError, invalidAccountIdsError, noAVailableFoundsError } from '~api/errors/transfers';
-import { checkAccountFounds, updatesAvailableFounds } from '~api/repositories/accounts';
-import moment from 'moment';
-// import { Rates } from '~api/models/currencies';
+import { checkAccountFounds, getUserAccounts, updatesAvailableFounds } from '~api/repositories/accounts';
+import { getUsers } from '~api/repositories/users';
+import { TransferQuery, TransferReport } from '~api/models/transfers';
+import { paginate } from './utils';
 
 export const createTransfer = async (transfer: Transfer): Promise<void> => {
   const existingAccounts = await checkAccounts(transfer.accountFrom, transfer.accountTo).catch(databaseErrorHandler);
@@ -57,4 +59,29 @@ export const createTransfer = async (transfer: Transfer): Promise<void> => {
     const convertedAmount = (transfer.amount * senderRate ) / receiverRate;
     await updatesAvailableFounds(transfer.accountTo, availableBalanceReceiver + convertedAmount).catch(databaseErrorHandler);
   }
+};
+
+export const getTransfers = async (params: TransferQuery): Promise<TransferReport[]> => {
+  const users = await getUsers();
+
+  const res: TransferReport[] = [];
+
+  for(const user of users) {
+    const userAccounts = await getUserAccounts(user.id);
+    const userOwnAccount = await getUserTransfers(userAccounts, params.dateFrom, params.dateTo);
+    const userExternalAccount = await getUserTransfers(userAccounts, params.dateFrom, params.dateTo, true);
+
+    const totalTransactions = userOwnAccount.length + userExternalAccount.length;
+    if(totalTransactions){
+      res.push(
+        {
+          name: user.name,
+          ownAccountPercentage: Math.round(((userOwnAccount.length / totalTransactions) * 100)) / 100,
+          externalAccountPercentage: Math.round((userExternalAccount.length / totalTransactions) * 100) / 100
+        }
+      );
+    }
+  }
+
+  return paginate(res, params.pageSize, params.page);
 };
