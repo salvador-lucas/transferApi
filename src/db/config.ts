@@ -2,8 +2,7 @@ import { Dialect, Sequelize } from 'sequelize';
 
 const dbName = process.env.DB_NAME as string;
 const dbUser = process.env.DB_USERNAME as string;
-// const dbHost = process.env.DB_HOSTNAME as string;
-const dbHost = 'localhost';
+const dbHost = process.env.DB_HOSTNAME as string;
 const dbDriver = process.env.DB_DRIVER as Dialect;
 const dbPassword = process.env.DB_PASS as string;
 
