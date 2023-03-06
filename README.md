@@ -13,7 +13,7 @@ $ docker-compose build
 Create the database in mysql
 
 ```
-$ docker-compose up mysqldb
+$ docker-compose up -d mysqldb
 ```
 Once the mysql service is running, create the database 
 
@@ -21,8 +21,10 @@ Once the mysql service is running, create the database
 CREATE DATABASE IF NOT EXISTS transfers;
 ```
 
+After that, start the node server 
+
 ```
-$ docker-compose up app
+$ docker-compose up -d app
 ```
 
 ### Available endpoints
