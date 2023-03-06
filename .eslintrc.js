@@ -22,7 +22,6 @@ module.exports = {
   ],
   'rules': {
     'no-console': ['warn', { allow: ['warn', 'error', 'time', 'timeEnd'] }],
-    'no-magic-numbers': ['error', { 'ignoreArrayIndexes': true, 'ignoreDefaultValues': true }],
     'camelcase': ['error', { properties: 'never', ignoreDestructuring: false, ignoreImports: true }],
     'default-case': 'error',
     'no-empty': ['error', { allowEmptyCatch: true }],

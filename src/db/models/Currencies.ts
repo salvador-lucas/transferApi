@@ -1,10 +1,12 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, Optional, literal } from 'sequelize';
 import sequelizeConnection from '../config';
 
 interface CurrencyAttributes {
   id: number;
   code: number;
   rate: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 class Currency extends Model<CurrencyAttributes, CurrencyInput> implements CurrencyAttributes {
@@ -31,6 +33,14 @@ Currency.init({
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: literal('NOW()')
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: literal('NOW()')
   }
 }, {
   sequelize: sequelizeConnection,

@@ -1,20 +1,18 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelizeConnection from '../config';
 import User from './Users';
-import Currency from './Currencies';
-// import Currency from './Currencies';
 
 interface AccountAttributes {
   id: number;
   userId: number;
-  currencyId: number;
+  currencyCode: number;
   balance: number;
 }
 
 class Account extends Model<AccountAttributes, AccountInput> implements AccountAttributes {
   public id!: number;
   public userId!: number;
-  public currencyId!: number;
+  public currencyCode!: number;
   public balance!: number;
 
   // timestamps
@@ -36,12 +34,8 @@ Account.init({
       key: 'id'
     }
   },
-  currencyId: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    references: {
-      model: Currency,
-      key: 'id'
-    }
+  currencyCode: {
+    type: DataTypes.STRING
   },
   balance: {
     type: DataTypes.FLOAT
