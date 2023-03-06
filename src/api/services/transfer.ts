@@ -82,6 +82,7 @@ export const getTransfers = async (params: TransferQuery): Promise<TransferRepor
       );
     }
   }
+  res.sort((a, b) => a.name < b.name ? -1 : 1);
 
   return paginate(res, params.pageSize, params.page);
 };
