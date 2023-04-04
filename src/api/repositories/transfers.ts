@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Op, WhereOptions } from 'sequelize';
+import { Op, Transaction, WhereOptions } from 'sequelize';
 import Account from '~db/models/Accounts';
 import Transfer from '~db/models/Transfers';
 
@@ -10,11 +10,10 @@ export const checkAccounts = async (accountFrom: number, accountTo: number): Pro
   return usersAccounts;
 };
 
-export const storeTransfer = async (transfer: Transfer): Promise<void> => {
+export const storeTransfer = async (transfer: Transfer, t?: Transaction): Promise<void> => {
   console.info('saving transfer in database');
-  await Transfer.create(transfer);
+  await Transfer.create(transfer, { transaction: t });
   console.info('finished saving transfer in database');
-  return;
 };
 
 export const getUserTransfers = async (accountIds: number[], dateFrom?: string, dateTo?: string, externalAccounts?: boolean): Promise<Transfer[]> => {
