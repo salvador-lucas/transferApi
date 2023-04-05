@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import generateHealthRoute from '~routes/health';
+import generateHealthRoute from './health';
 import generateAuthRoutes from './auth';
 import generateTransferRoutes from './transfers';
 // import generateAuthRoutes from '~routes/auth';
