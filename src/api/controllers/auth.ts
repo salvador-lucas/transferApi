@@ -1,11 +1,13 @@
-import { Request } from 'express';
-import { LoginUser } from '~api/models/users';
+import { NextFunction, Request, Response } from 'express';
 import { login, userSignup } from '~api/services/auth';
+import { STATUS_CODES } from '~constants';
 
-export const handleUserSignup = async (req: Request): Promise<void> => {
+export const handleUserSignup = async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
   await userSignup(req.body);
+  res.status(STATUS_CODES.CREATED).send();
 };
 
-export const handleLogin = async (req: Request): Promise<LoginUser> => {
-  return await login(req.body);
+export const handleLogin = async (req: Request, res: Response, _next: NextFunction): Promise<void> => {
+  await login(req.body);
+  res.status(STATUS_CODES.CREATED).send();
 };
