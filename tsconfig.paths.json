@@ -15,9 +15,7 @@
       "~routes": ["./api/routes"],
       "~routes/*": ["./api/routes/*"],
       "~tests": ["tests"],
-      "~tests/*": ["tests/*"],
-      "~utils": ["./utils"],
-      "~utils/*": ["./utils/*"]
+      "~tests/*": ["tests/*"]
     }
   }
 }
