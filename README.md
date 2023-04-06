@@ -19,6 +19,7 @@ Once the mysql service is running, create the database
 
 ```
 CREATE DATABASE IF NOT EXISTS transfers;
+CREATE DATABASE IF NOT EXISTS transfersTest;
 ```
 
 After that, start the node server 

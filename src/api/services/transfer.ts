@@ -58,7 +58,7 @@ export const createTransfer = async (transfer: Transfer): Promise<void> => {
       await updatesAvailableFounds(transfer.accountFrom, availableBalanceSender - transfer.amount, t);
 
       //convertir el saldo en la cuenta receptora
-      const convertedAmount = (transfer.amount * senderRate ) / receiverRate;
+      const convertedAmount = (transfer.amount * 0.9 * senderRate ) / receiverRate;
       await updatesAvailableFounds(transfer.accountTo, availableBalanceReceiver + convertedAmount, t);
     }
     await storeTransfer(transfer, t);
