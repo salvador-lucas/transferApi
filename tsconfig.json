@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    /** Basic Options **/
     "allowJs": true,
     "checkJs": true,
     "declaration": true,
@@ -16,7 +15,6 @@
     "target": "es2018",
     "removeComments": true,
 
-    /** Strict Type-Checking Options **/
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -26,14 +24,13 @@
     "strictPropertyInitialization": true,
     "skipLibCheck": true,
 
-    /** Additional Checks **/
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
 
-    /** Experimental Options **/
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
+
   },
   "include": ["*/**/*.ts"],
   "exlude": ["**/node_modules"],

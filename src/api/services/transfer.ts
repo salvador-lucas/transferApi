@@ -9,6 +9,8 @@ import { checkAccountFounds, getUserAccounts, updatesAvailableFounds } from '~ap
 import { getUsers } from '~api/repositories/users';
 import { TransferQuery, TransferReport } from '~api/models/transfers';
 import { paginate } from './utils';
+import sequelizeConnection from '~db/config';
+import { ErrnoException } from '~api/models/error';
 
 export const createTransfer = async (transfer: Transfer): Promise<void> => {
   const existingAccounts = await checkAccounts(transfer.accountFrom, transfer.accountTo).catch(databaseErrorHandler);
@@ -48,16 +50,22 @@ export const createTransfer = async (transfer: Transfer): Promise<void> => {
     throw noAVailableFoundsError();
   }
 
-  await storeTransfer(transfer).catch(databaseErrorHandler);
+  const t = await sequelizeConnection.transaction();
+  try{
+    //una transferencia hacia una misma cuenta daría como resultado el mismo saldo actual, por lo que no es necesario actualizarlo
+    if(transfer.accountFrom != transfer.accountTo) {
+      // restar el saldo a la cuenta emisora
+      await updatesAvailableFounds(transfer.accountFrom, availableBalanceSender - transfer.amount, t);
 
-  //una transferencia hacia una misma cuenta daría como resultado el mismo saldo actual, por lo que no es necesario actualizarlo
-  if(transfer.accountFrom != transfer.accountTo) {
-    // restar el saldo a la cuenta emisora
-    await updatesAvailableFounds(transfer.accountFrom, availableBalanceSender - transfer.amount).catch(databaseErrorHandler);
-
-    //recibir el saldo en la cuenta receptora
-    const convertedAmount = (transfer.amount * senderRate ) / receiverRate;
-    await updatesAvailableFounds(transfer.accountTo, availableBalanceReceiver + convertedAmount).catch(databaseErrorHandler);
+      //convertir el saldo en la cuenta receptora
+      const convertedAmount = (transfer.amount * 0.9 * senderRate ) / receiverRate;
+      await updatesAvailableFounds(transfer.accountTo, availableBalanceReceiver + convertedAmount, t);
+    }
+    await storeTransfer(transfer, t);
+    await t.commit();
+  }catch(e){
+    await t.rollback();
+    throw databaseErrorHandler(e as ErrnoException);
   }
 };
 

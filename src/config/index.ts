@@ -14,7 +14,7 @@ const generateConfig = (): Config => {
     return (process.env[key] || defaultValue) as string;
   };
 
-  const environment = 'local';
+  const environment = process.env.NODE_ENV || 'local';
 
   const config: Config = {
     environment,

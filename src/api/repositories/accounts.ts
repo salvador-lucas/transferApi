@@ -1,3 +1,5 @@
+import { Transaction } from 'sequelize';
+import sequelizeConnection from '~db/config';
 import Account from '~db/models/Accounts';
 
 export const checkAccountFounds = async (accountFrom: number): Promise<number | undefined> => {
@@ -5,9 +7,8 @@ export const checkAccountFounds = async (accountFrom: number): Promise<number | 
   return foundAccount?.balance;
 };
 
-export const updatesAvailableFounds = async (accountFrom: number, balance: number): Promise<void> => {
-  await Account.update({ balance: balance }, { where: { id: accountFrom } });
-  return;
+export const updatesAvailableFounds = async (accountFrom: number, balance: number, t?: Transaction): Promise<void> => {
+  await Account.update({ balance }, { where: { id: accountFrom }, transaction: t });
 };
 
 export const getUserAccounts = async (userId: number): Promise<number[]> => {
@@ -16,4 +17,13 @@ export const getUserAccounts = async (userId: number): Promise<number[]> => {
   console.info('finished getting user accounts from database');
   const accountIds = accounts.map(ac => ac.id);
   return accountIds;
+};
+
+export const updatesTransactionFounds = async (accountFrom: number, balanceFrom: number, accountTo: number, balanceTo: number): Promise<void> => {
+  sequelizeConnection.transaction(async (_t: Transaction) => {
+    return Promise.all([
+      Account.update({ balance: balanceFrom }, { where: { id: accountFrom } }),
+      Account.update({ balance: balanceTo }, { where: { id: accountTo } }),
+    ]);
+  });
 };

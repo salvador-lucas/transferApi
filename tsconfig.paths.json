@@ -4,6 +4,7 @@
     "paths": {
       "~api": ["./api"],
       "~api/*": ["./api/*"],
+      "~app": ["./app"],
       "~config": ["./config"],
       "~config/*": ["./config/*"],
       "~constants": ["./constants"],
@@ -15,9 +16,7 @@
       "~routes": ["./api/routes"],
       "~routes/*": ["./api/routes/*"],
       "~tests": ["tests"],
-      "~tests/*": ["tests/*"],
-      "~utils": ["./utils"],
-      "~utils/*": ["./utils/*"]
+      "~tests/*": ["tests/*"]
     }
   }
 }
