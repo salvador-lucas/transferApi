@@ -38,7 +38,8 @@ Account.init({
     type: DataTypes.STRING
   },
   balance: {
-    type: DataTypes.FLOAT
+    type: DataTypes.FLOAT,
+    defaultValue: 0,
   },
 }, {
   sequelize: sequelizeConnection,
