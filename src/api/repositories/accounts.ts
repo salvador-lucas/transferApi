@@ -35,11 +35,6 @@ export const storeAccount = async (account: Account, t?: Transaction): Promise<v
   console.info('finished account transfer in database');
 };
 
-export const updatesTransactionFounds = async (accountFrom: number, balanceFrom: number, accountTo: number, balanceTo: number): Promise<void> => {
-  sequelizeConnection.transaction(async (_t: Transaction) => {
-    return Promise.all([
-      Account.update({ balance: balanceFrom }, { where: { id: accountFrom } }),
-      Account.update({ balance: balanceTo }, { where: { id: accountTo } }),
-    ]);
-  });
+export const findAccountById = async (id: number): Promise<Account | null> => {
+  return await Account.findByPk(id);
 };

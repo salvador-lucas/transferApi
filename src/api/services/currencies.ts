@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { serviceUnavailableError } from '~api/errors';
 import { Rates } from '~api/models/currencies';
-import { getExchangeRates, updateRatesDB } from '~api/repositories/currencies';
+import { getExchangeRates, createOrUpdateRatesDB } from '~api/repositories/currencies';
 import { databaseErrorHandler } from '~db/error_handler';
 import Currency from '~db/models/Currencies';
 
@@ -21,7 +21,7 @@ export const getExchangeRatesFromProvider = async (): Promise<Rates> => {
       rates[i] = 1 / rates[i];
     }
 
-    await updateRatesDB(rates).catch(databaseErrorHandler);
+    await createOrUpdateRatesDB(rates).catch(databaseErrorHandler);
 
     return rates;
   } catch (e) {
