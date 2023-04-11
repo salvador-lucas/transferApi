@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { serviceUnavailableError } from '~api/errors';
 import { Rates } from '~api/models/currencies';
-import { updateRatesDB } from '~api/repositories/currencies';
+import { getExchangeRates, updateRatesDB } from '~api/repositories/currencies';
 import { databaseErrorHandler } from '~db/error_handler';
+import Currency from '~db/models/Currencies';
 
 export const getExchangeRatesFromProvider = async (): Promise<Rates> => {
   try {
@@ -27,4 +28,8 @@ export const getExchangeRatesFromProvider = async (): Promise<Rates> => {
     console.error(e);
     throw serviceUnavailableError();
   }
+};
+
+export const getCurrencies = async(): Promise<Currency[]> => {
+  return await getExchangeRates();
 };
