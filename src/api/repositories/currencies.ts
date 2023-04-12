@@ -9,9 +9,21 @@ export const getExchangeRates = async (): Promise<Currency[]> => {
   return rates;
 };
 
-export const updateRatesDB = async (rates: Rates): Promise<void> => {
+export const createOrUpdateRatesDB = async (rates: Rates): Promise<void> => {
   for(const code in rates) {
-    await Currency.update({ rate: rates[code] }, { where: { code } });
+    // await Currency.update({ rate: rates[code] }, { where: { code } });
+    await Currency.upsert({ rate: rates[code], code });
   }
   return ;
+};
+
+export const getExchangeRateByCode = async (code: string): Promise<Currency | null> => {
+  const rate = await Currency.findOne({
+    where: {
+      code
+    },
+    attributes: ['code', 'rate', 'updatedAt'],
+  });
+
+  return rate;
 };

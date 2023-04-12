@@ -11,12 +11,13 @@ export const updatesAvailableFounds = async (accountFrom: number, balance: numbe
   await Account.update({ balance }, { where: { id: accountFrom }, transaction: t });
 };
 
-export const getUserAccounts = async (userId: number): Promise<number[]> => {
+export const findUserAccounts = async (userId: number, onlyIds?: boolean): Promise<number[] | Account[]> => {
   console.info('getting user accounts from database');
   const accounts = await Account.findAll({ where:{ userId } });
   console.info('finished getting user accounts from database');
-  const accountIds = accounts.map(ac => ac.id);
-  return accountIds;
+  if(onlyIds)
+    return  accounts.map(ac => ac.id);
+  return accounts;
 };
 
 export const updatesTransactionFounds = async (accountFrom: number, balanceFrom: number, accountTo: number, balanceTo: number): Promise<void> => {
@@ -26,4 +27,14 @@ export const updatesTransactionFounds = async (accountFrom: number, balanceFrom:
       Account.update({ balance: balanceTo }, { where: { id: accountTo } }),
     ]);
   });
+};
+
+export const storeAccount = async (account: Account, t?: Transaction): Promise<void> => {
+  console.info('saving account in database');
+  await Account.create(account, { transaction: t });
+  console.info('finished account transfer in database');
+};
+
+export const findAccountById = async (id: number): Promise<Account | null> => {
+  return await Account.findByPk(id);
 };

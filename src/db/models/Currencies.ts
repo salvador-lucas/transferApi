@@ -3,7 +3,7 @@ import sequelizeConnection from '../config';
 
 interface CurrencyAttributes {
   id: number;
-  code: number;
+  code: string;
   rate: number;
   createdAt: Date;
   updatedAt: Date;
@@ -11,7 +11,7 @@ interface CurrencyAttributes {
 
 class Currency extends Model<CurrencyAttributes, CurrencyInput> implements CurrencyAttributes {
   public id!: number;
-  public code!: number;
+  public code!: string;
   public rate!: number;
 
   public readonly createdAt!: Date;
@@ -46,7 +46,7 @@ Currency.init({
   sequelize: sequelizeConnection,
 });
 
-export type CurrencyInput = Optional<CurrencyAttributes, 'id'>;
+export type CurrencyInput = Optional<CurrencyAttributes, 'id' | 'updatedAt' | 'createdAt'>;
 export type CurrencyOuput = Required<CurrencyAttributes>;
 
 export default Currency;

@@ -5,7 +5,7 @@ import { databaseErrorHandler } from '~db/error_handler';
 import Transfer from '~db/models/Transfers';
 import { getExchangeRatesFromProvider } from './currencies';
 import { accountInfoNotFoundError, invalidAccountIdsError, noAVailableFoundsError } from '~api/errors/transfers';
-import { checkAccountFounds, getUserAccounts, updatesAvailableFounds } from '~api/repositories/accounts';
+import { checkAccountFounds, findUserAccounts, updatesAvailableFounds } from '~api/repositories/accounts';
 import { getUsers } from '~api/repositories/users';
 import { TransferQuery, TransferReport } from '~api/models/transfers';
 import { paginate } from './utils';
@@ -75,7 +75,7 @@ export const getTransfers = async (params: TransferQuery): Promise<TransferRepor
   const res: TransferReport[] = [];
 
   for(const user of users) {
-    const userAccounts = await getUserAccounts(user.id);
+    const userAccounts = await findUserAccounts(user.id, true) as number[];
     const userOwnAccount = await getUserTransfers(userAccounts, params.dateFrom, params.dateTo);
     const userExternalAccount = await getUserTransfers(userAccounts, params.dateFrom, params.dateTo, true);
 

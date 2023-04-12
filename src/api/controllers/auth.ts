@@ -8,6 +8,6 @@ export const handleUserSignup = async (req: Request, res: Response): Promise<voi
 };
 
 export const handleLogin = async (req: Request, res: Response): Promise<void> => {
-  await login(req.body);
-  res.status(STATUS_CODES.CREATED).send();
+  const token = await login(req.body);
+  res.status(STATUS_CODES.OK).send(token);
 };

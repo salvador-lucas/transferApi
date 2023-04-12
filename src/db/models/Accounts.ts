@@ -5,14 +5,14 @@ import User from './Users';
 interface AccountAttributes {
   id: number;
   userId: number;
-  currencyCode: number;
+  currencyCode: string;
   balance: number;
 }
 
 class Account extends Model<AccountAttributes, AccountInput> implements AccountAttributes {
   public id!: number;
   public userId!: number;
-  public currencyCode!: number;
+  public currencyCode!: string;
   public balance!: number;
 
   // timestamps
@@ -38,7 +38,8 @@ Account.init({
     type: DataTypes.STRING
   },
   balance: {
-    type: DataTypes.FLOAT
+    type: DataTypes.FLOAT,
+    defaultValue: 0,
   },
 }, {
   sequelize: sequelizeConnection,

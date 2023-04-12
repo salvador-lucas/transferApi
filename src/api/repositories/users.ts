@@ -14,6 +14,13 @@ export const findUserByUsermail = async (user: User): Promise<User | null> => {
   return dbUser;
 };
 
+export const findUserById = async (userId: number): Promise<User | null> => {
+  console.info('finding user in database');
+  const dbUser = await User.findByPk(userId);
+  console.info('finished finding user in database');
+  return dbUser;
+};
+
 export const getUsers = async (): Promise<User[]> => {
   console.info('getting user from database');
   const users = await User.findAll();
